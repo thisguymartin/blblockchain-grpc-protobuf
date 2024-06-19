@@ -3,6 +3,7 @@ package crypto
 import (
 	"crypto/ed25519"
 	"crypto/rand"
+	"encoding/hex"
 	"io"
 )
 
@@ -10,6 +11,7 @@ var (
 	privateKeyLength = 64
 	publicKeyLength  = 32
 	seedLen          = 32
+	addressLength    = 20
 )
 
 type PrivateKey struct {
@@ -60,10 +62,29 @@ func (p *PublicKey) Bytes() []byte {
 	return p.key
 }
 
+func (p *PublicKey) Address() Address {
+
+	return Address{
+		value: p.key[len(p.key)-addressLength:],
+	}
+}
+
 func (s *Signature) Verify(pubKey *PublicKey, msg []byte) bool {
 	return ed25519.Verify(pubKey.key, msg, s.value)
 }
 
 func (s *Signature) Bytes() []byte {
 	return s.value
+}
+
+type Address struct {
+	value []byte
+}
+
+func (a Address) String() string {
+	return hex.EncodeToString(a.value)
+}
+
+func (a *Address) Bytes() []byte {
+	return a.value
 }
