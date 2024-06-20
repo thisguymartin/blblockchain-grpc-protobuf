@@ -26,6 +26,28 @@ type Signature struct {
 	value []byte
 }
 
+type Address struct {
+	value []byte
+}
+
+func NewPrivateKeyFromString(seed string) PrivateKey {
+	b, err := hex.DecodeString(seed)
+	if err != nil {
+		panic(err)
+	}
+	return NewPrivateKeyFromSeed(b)
+}
+
+func NewPrivateKeyFromSeed(seed []byte) PrivateKey {
+	if len(seed) != seedLen {
+		panic("invalid seed length must be 32")
+	}
+
+	return PrivateKey{
+		key: ed25519.NewKeyFromSeed(seed)}
+
+}
+
 func GeneratePrivateKey() *PrivateKey {
 	seed := make([]byte, seedLen)
 
@@ -75,10 +97,6 @@ func (s *Signature) Verify(pubKey *PublicKey, msg []byte) bool {
 
 func (s *Signature) Bytes() []byte {
 	return s.value
-}
-
-type Address struct {
-	value []byte
 }
 
 func (a Address) String() string {
