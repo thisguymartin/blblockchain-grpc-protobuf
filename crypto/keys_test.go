@@ -10,8 +10,7 @@ import (
 func TestGeneratePrivateKey(t *testing.T) {
 	privateKey := GeneratePrivateKey()
 	publicKey := privateKey.Public()
-	// fmt.Println("privateKey", privateKey)
-	// fmt.Println("publicKey", publicKey)
+
 	assert.Equal(t, len(privateKey.Bytes()), privateKeyLength)
 	assert.Equal(t, len(publicKey.Bytes()), publicKeyLength)
 

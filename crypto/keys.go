@@ -103,6 +103,6 @@ func (a Address) String() string {
 	return hex.EncodeToString(a.value)
 }
 
-func (a *Address) Bytes() []byte {
+func (a Address) Bytes() []byte {
 	return a.value
 }
